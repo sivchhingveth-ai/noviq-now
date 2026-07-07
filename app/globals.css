@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-glass: var(--glass);
+  --color-glass-border: var(--glass-border);
+  --color-glass-hover: var(--glass-hover);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-accent: var(--accent);
+  --color-surface: var(--surface);
+  --font-sans: var(--font-inter);
+}
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-hover: rgba(255, 255, 255, 0.1);
+  --accent: #3b82f6;
+  --surface: #111111;
+}
+
+.light {
+  --background: #f8f9fa;
+  --foreground: #1a1a1a;
+  --text-primary: #1a1a1a;
+  --text-secondary: #71717a;
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-hover: rgba(255, 255, 255, 0.85);
+  --accent: #3b82f6;
+  --surface: #ffffff;
+}
+
+body {
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.light .dot-grid {
+  background-image: radial-gradient(circle, rgba(0,0,0,0.04) 1px, transparent 1px);
+}
+
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+.glass-sm {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+}
+
+.glass-hover:hover {
+  background: var(--glass-hover);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12),
+              0 0 20px rgba(59, 130, 246, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.light .glass-hover:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06),
+              0 0 20px rgba(59, 130, 246, 0.06),
+              inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-animate {
+  animation: ticker-scroll 40s linear infinite;
+}
+
+.ticker-animate:hover {
+  animation-play-state: paused;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+
+.pulse-live {
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+@keyframes glow-new {
+  0%, 100% { box-shadow: 0 0 4px rgba(59, 130, 246, 0.3); }
+  50% { box-shadow: 0 0 12px rgba(59, 130, 246, 0.6); }
+}
+
+.glow-new {
+  animation: glow-new 2s ease-in-out infinite;
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.light .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.light .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}

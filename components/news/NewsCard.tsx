@@ -1,0 +1,98 @@
+'use client';
+
+import Image from 'next/image';
+import { Article } from '@/lib/types';
+import { timeAgo, cn } from '@/lib/utils';
+import { PulsingDot } from '@/components/ui/PulsingDot';
+import { BookmarkButton } from '@/components/ui/BookmarkButton';
+import { SummarizeButton } from '@/components/ui/SummarizeButton';
+import { motion } from 'framer-motion';
+
+interface NewsCardProps {
+  article: Article;
+  isBookmarked: boolean;
+  onBookmarkToggle: (id: string) => void;
+  onClick: (article: Article) => void;
+  onSummarize: (article: Article) => void;
+}
+
+export function NewsCard({
+  article,
+  isBookmarked,
+  onBookmarkToggle,
+  onClick,
+  onSummarize,
+}: NewsCardProps) {
+  return (
+    <motion.article
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+      transition={{ duration: 0.3 }}
+      whileHover={{ y: -2 }}
+      onClick={() => onClick(article)}
+      className={cn(
+        'glass glass-hover group cursor-pointer overflow-hidden transition-all duration-300',
+        article.isNew && 'glow-new'
+      )}
+    >
+      <div className="relative h-44 overflow-hidden">
+        <Image
+          src={article.imageUrl}
+          alt={article.title}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+        <div className="absolute left-3 top-3 flex items-center gap-2">
+          {article.isLive && (
+            <span className="flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-semibold text-accent backdrop-blur-sm">
+              <PulsingDot className="h-1.5 w-1.5" />
+              LIVE
+            </span>
+          )}
+          {article.isNew && (
+            <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-semibold text-white">
+              NEW
+            </span>
+          )}
+        </div>
+
+        <div className="absolute right-3 top-3">
+          <BookmarkButton
+            isBookmarked={isBookmarked}
+            onToggle={() => onBookmarkToggle(article.id)}
+          />
+        </div>
+      </div>
+
+      <div className="p-4">
+        <div className="mb-2 flex items-center gap-2">
+          <span className="text-lg">{article.sourceLogo}</span>
+          <span className="text-xs font-medium text-text-secondary">
+            {article.source}
+          </span>
+          <span className="text-text-secondary">·</span>
+          <span className="text-xs text-text-secondary">
+            {timeAgo(article.publishedAt)}
+          </span>
+        </div>
+
+        <h3 className="mb-2 text-[15px] font-semibold leading-snug text-text-primary line-clamp-2 transition-colors group-hover:text-accent">
+          {article.title}
+        </h3>
+
+        <p className="text-[13px] leading-relaxed text-text-secondary line-clamp-2">
+          {article.summary}
+        </p>
+
+        <div className="mt-3">
+          <SummarizeButton onClick={() => onSummarize(article)} />
+        </div>
+      </div>
+    </motion.article>
+  );
+}
