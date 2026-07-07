@@ -32,7 +32,7 @@ export function Navbar({
             <Zap className="h-4 w-4 text-white" />
           </div>
           <span className="text-lg font-bold tracking-tight text-text-primary hidden sm:block">
-            PulseFeed
+            InsightNewsFeed
           </span>
         </div>
 

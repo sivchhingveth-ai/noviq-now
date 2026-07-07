@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'PulseFeed — Real-Time News Dashboard',
-  description: 'Live news tracking dashboard with real-time updates from multiple sources.',
+  title: 'InsightNewsFeed — Real-Time News Dashboard',
+  description: 'Live news tracking dashboard with AI-powered summarization and real-time updates from multiple sources.',
 };
 
 export default function RootLayout({

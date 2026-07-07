@@ -17,8 +17,8 @@ export async function POST(req: NextRequest) {
 
     const chat = model.startChat({
       history: [
-        { role: 'user', parts: [{ text: 'You are PulseFeed AI. Follow these rules: Be concise (under 200 words). Be factual. Use article context when provided.' }] },
-        { role: 'model', parts: [{ text: 'Understood. I am PulseFeed AI, ready to summarize news and answer questions accurately and concisely.' }] },
+        { role: 'user', parts: [{ text: 'You are Insight AI, a news assistant for InsightNewsFeed. Follow these rules: Be concise (under 200 words). Be factual. Use article context when provided.' }] },
+        { role: 'model', parts: [{ text: 'Understood. I am Insight AI, ready to summarize news and answer questions accurately and concisely.' }] },
       ],
       generationConfig: {
         maxOutputTokens: 500,

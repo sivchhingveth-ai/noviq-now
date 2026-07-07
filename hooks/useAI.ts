@@ -15,7 +15,7 @@ export function useAI() {
 
   const getApiKey = useCallback(() => {
     if (typeof window === 'undefined') return '';
-    return localStorage.getItem('pulsefeed_gemini_key') || '';
+    return localStorage.getItem('insight_gemini_key') || '';
   }, []);
 
   const sendMessage = useCallback(

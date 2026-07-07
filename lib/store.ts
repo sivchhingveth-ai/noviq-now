@@ -1,6 +1,6 @@
-const BOOKMARKS_KEY = 'pulsefeed_bookmarks';
-const READ_KEY = 'pulsefeed_read';
-const SEEN_KEY = 'pulsefeed_seen';
+const BOOKMARKS_KEY = 'insight_bookmarks';
+const READ_KEY = 'insight_read';
+const SEEN_KEY = 'insight_seen';
 
 export function getBookmarks(): string[] {
   if (typeof window === 'undefined') return [];

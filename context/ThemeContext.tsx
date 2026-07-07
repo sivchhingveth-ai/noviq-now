@@ -16,7 +16,7 @@ const ThemeContext = createContext<ThemeContextType>({
 
 function getInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'dark';
-  const stored = localStorage.getItem('pulsefeed_theme') as Theme | null;
+  const stored = localStorage.getItem('insight_theme') as Theme | null;
   if (stored === 'light' || stored === 'dark') {
     document.documentElement.classList.toggle('light', stored === 'light');
     return stored;
@@ -30,7 +30,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
     setTheme(next);
-    localStorage.setItem('pulsefeed_theme', next);
+    localStorage.setItem('insight_theme', next);
     document.documentElement.classList.toggle('light', next === 'light');
   };
 

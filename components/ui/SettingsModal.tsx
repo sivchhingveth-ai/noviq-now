@@ -20,12 +20,12 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 function SettingsContent({ onClose }: { onClose: () => void }) {
   const [apiKey, setApiKey] = useState(() => {
     if (typeof window === 'undefined') return '';
-    return localStorage.getItem('pulsefeed_gemini_key') || '';
+    return localStorage.getItem('insight_gemini_key') || '';
   });
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
-    localStorage.setItem('pulsefeed_gemini_key', apiKey.trim());
+    localStorage.setItem('insight_gemini_key', apiKey.trim());
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };

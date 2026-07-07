@@ -60,7 +60,7 @@ export function AIChatPanel({ onOpenSettings }: AIChatPanelProps) {
               <div className="flex items-center justify-between border-b border-glass-border px-4 py-3">
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-accent" />
-                  <span className="text-sm font-semibold text-text-primary">PulseFeed AI</span>
+                  <span className="text-sm font-semibold text-text-primary">Insight AI</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <button
