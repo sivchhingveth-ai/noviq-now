@@ -8,7 +8,14 @@ import { BookmarkButton } from '@/components/ui/BookmarkButton';
 import { SummarizeButton } from '@/components/ui/SummarizeButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink, Newspaper } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+function decodeHtml(text: string) {
+  const el = typeof document !== 'undefined' ? document.createElement('textarea') : null;
+  if (!el) return text;
+  el.innerHTML = text;
+  return el.value;
+}
 
 interface NewsSlideOverProps {
   article: Article | null;
@@ -26,6 +33,18 @@ export function NewsSlideOver({
   onSummarize,
 }: NewsSlideOverProps) {
   const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    if (article) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [article]);
+
+  const description = article ? decodeHtml(article.fullContent) : '';
+  const sourceUrl = article?.url || '#';
 
   return (
     <AnimatePresence>
@@ -96,7 +115,7 @@ export function NewsSlideOver({
 
               <div className="mb-6 rounded-xl border border-glass-border bg-white/5 p-4">
                 <p className="text-sm leading-relaxed text-text-secondary whitespace-pre-line">
-                  {article.fullContent}
+                  {description}
                 </p>
               </div>
 
@@ -106,7 +125,7 @@ export function NewsSlideOver({
                   size="md"
                 />
                 <a
-                  href={article.url}
+                  href={sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20"
@@ -119,7 +138,16 @@ export function NewsSlideOver({
 
               <div className="mt-4 rounded-xl border border-glass-border bg-white/5 p-3">
                 <p className="text-[11px] text-text-secondary">
-                  Source: <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">{article.source}</a> · Opens in new tab
+                  Source:{' '}
+                  <a
+                    href={sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent hover:underline"
+                  >
+                    {article.source}
+                  </a>
+                  {' '}· Opens in new tab
                 </p>
               </div>
             </div>

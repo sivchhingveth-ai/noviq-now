@@ -27,6 +27,20 @@ const RSS_FEEDS: { url: string; category: string; source: string; logo: string; 
   { url: 'https://www.aljazeera.com/xml/rss/all.xml', category: 'wars', source: 'Al Jazeera', logo: '📡', format: 'rss' },
 ];
 
+function decodeHtmlEntities(str: string) {
+  return str
+    .replace(/&#0*39;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#\d+;/g, (m) => {
+      const code = parseInt(m.slice(2, -1), 10);
+      return String.fromCharCode(code);
+    });
+}
+
 function parseXml(text: string, format: 'rss' | 'atom') {
   const items: { title: string; link: string; description: string; pubDate: string; imageUrl: string }[] = [];
 
@@ -51,9 +65,9 @@ function parseXml(text: string, format: 'rss' | 'atom') {
 
       if (title && link) {
         items.push({
-          title: title.replace(/<[^>]*>/g, '').trim(),
+          title: decodeHtmlEntities(title.replace(/<[^>]*>/g, '').trim()),
           link,
-          description: summary.replace(/<[^>]*>/g, '').trim(),
+          description: decodeHtmlEntities(summary.replace(/<[^>]*>/g, '').trim()),
           pubDate,
           imageUrl: mediaContent,
         });
@@ -77,9 +91,9 @@ function parseXml(text: string, format: 'rss' | 'atom') {
 
       if (title && link) {
         items.push({
-          title: title.replace(/<[^>]*>/g, '').trim(),
+          title: decodeHtmlEntities(title.replace(/<[^>]*>/g, '').trim()),
           link,
-          description: description.replace(/<[^>]*>/g, '').trim(),
+          description: decodeHtmlEntities(description.replace(/<[^>]*>/g, '').trim()),
           pubDate,
           imageUrl: mediaContent,
         });
