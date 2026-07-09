@@ -7,7 +7,8 @@ import { PulsingDot } from '@/components/ui/PulsingDot';
 import { BookmarkButton } from '@/components/ui/BookmarkButton';
 import { SummarizeButton } from '@/components/ui/SummarizeButton';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink } from 'lucide-react';
+import { X, ExternalLink, Newspaper } from 'lucide-react';
+import { useState } from 'react';
 
 interface NewsSlideOverProps {
   article: Article | null;
@@ -24,6 +25,8 @@ export function NewsSlideOver({
   onClose,
   onSummarize,
 }: NewsSlideOverProps) {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <AnimatePresence>
       {article && (
@@ -70,11 +73,12 @@ export function NewsSlideOver({
 
             <div className="relative h-56 overflow-hidden">
               <Image
-                src={article.imageUrl}
+                src={imgError ? `https://picsum.photos/seed/${article.id}/800/450` : article.imageUrl}
                 alt={article.title}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 512px"
+                onError={() => setImgError(true)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent" />
             </div>
@@ -90,9 +94,11 @@ export function NewsSlideOver({
                 {article.title}
               </h2>
 
-              <p className="text-sm leading-relaxed text-text-secondary mb-6">
-                {article.fullContent}
-              </p>
+              <div className="mb-6 rounded-xl border border-glass-border bg-white/5 p-4">
+                <p className="text-sm leading-relaxed text-text-secondary whitespace-pre-line">
+                  {article.fullContent}
+                </p>
+              </div>
 
               <div className="flex items-center gap-3">
                 <SummarizeButton
@@ -105,9 +111,16 @@ export function NewsSlideOver({
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20"
                 >
+                  <Newspaper className="h-4 w-4" />
                   Read full article
                   <ExternalLink className="h-4 w-4" />
                 </a>
+              </div>
+
+              <div className="mt-4 rounded-xl border border-glass-border bg-white/5 p-3">
+                <p className="text-[11px] text-text-secondary">
+                  Source: <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">{article.source}</a> · Opens in new tab
+                </p>
               </div>
             </div>
           </motion.div>

@@ -18,7 +18,7 @@ const RSS_FEEDS: { url: string; category: string; source: string; logo: string }
 ];
 
 function parseXml(text: string) {
-  const items: { title: string; link: string; description: string; pubDate: string }[] = [];
+  const items: { title: string; link: string; description: string; pubDate: string; imageUrl: string }[] = [];
   const itemMatches = text.match(/<item>([\s\S]*?)<\/item>/gi) || [];
 
   for (const item of itemMatches.slice(0, 5)) {
@@ -31,19 +31,26 @@ function parseXml(text: string) {
       || '';
     const pubDate = item.match(/<pubDate>([\s\S]*?)<\/pubDate>/i)?.[1] || '';
 
+    // Extract real image from RSS: media:content > media:thumbnail > enclosure
+    const mediaContent = item.match(/<media:content[^>]*url="([^"]+)"/i)?.[1]
+      || item.match(/<media:thumbnail[^>]*url="([^"]+)"/i)?.[1]
+      || item.match(/<enclosure[^>]*url="([^"]+)"[^>]*type="image\/[^"]+"/i)?.[1]
+      || '';
+
     if (title && link) {
       items.push({
         title: title.replace(/<[^>]*>/g, '').trim(),
         link,
-        description: description.replace(/<[^>]*>/g, '').trim().slice(0, 200),
+        description: description.replace(/<[^>]*>/g, '').trim(),
         pubDate,
+        imageUrl: mediaContent,
       });
     }
   }
   return items;
 }
 
-function buildArticle(item: { title: string; link: string; description: string; pubDate: string }, feed: typeof RSS_FEEDS[0], index: number) {
+function buildArticle(item: { title: string; link: string; description: string; pubDate: string; imageUrl: string }, feed: typeof RSS_FEEDS[0], index: number) {
   const pubTime = item.pubDate ? new Date(item.pubDate).getTime() : Date.now();
   const slug = item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 30);
   return {
@@ -54,7 +61,7 @@ function buildArticle(item: { title: string; link: string; description: string; 
     source: feed.source,
     sourceLogo: feed.logo,
     category: feed.category,
-    imageUrl: `https://picsum.photos/seed/${slug}/800/450`,
+    imageUrl: item.imageUrl || `https://picsum.photos/seed/${feed.category}-${index}/800/450`,
     publishedAt: item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString(),
     url: item.link,
     isLive: Date.now() - pubTime < 30 * 60 * 1000,

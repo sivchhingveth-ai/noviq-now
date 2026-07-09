@@ -7,6 +7,8 @@ import { PulsingDot } from '@/components/ui/PulsingDot';
 import { BookmarkButton } from '@/components/ui/BookmarkButton';
 import { SummarizeButton } from '@/components/ui/SummarizeButton';
 import { motion } from 'framer-motion';
+import { ExternalLink } from 'lucide-react';
+import { useState } from 'react';
 
 interface NewsCardProps {
   article: Article;
@@ -23,6 +25,9 @@ export function NewsCard({
   onClick,
   onSummarize,
 }: NewsCardProps) {
+  const [imgError, setImgError] = useState(false);
+  const fallbackImg = `https://picsum.photos/seed/${article.id}/800/450`;
+
   return (
     <motion.article
       layout
@@ -39,11 +44,12 @@ export function NewsCard({
     >
       <div className="relative h-44 overflow-hidden">
         <Image
-          src={article.imageUrl}
+          src={imgError ? fallbackImg : article.imageUrl}
           alt={article.title}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          onError={() => setImgError(true)}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
@@ -89,8 +95,18 @@ export function NewsCard({
           {article.summary}
         </p>
 
-        <div className="mt-3">
+        <div className="mt-3 flex items-center gap-2">
           <SummarizeButton onClick={() => onSummarize(article)} />
+          <a
+            href={article.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-glass-border bg-white/5 px-3 py-1.5 text-[12px] font-medium text-text-secondary transition-all hover:bg-white/10 hover:text-text-primary"
+          >
+            Read
+            <ExternalLink className="h-3 w-3" />
+          </a>
         </div>
       </div>
     </motion.article>
