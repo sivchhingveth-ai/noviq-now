@@ -136,12 +136,14 @@ function Dashboard() {
       <BookmarksPage
         isOpen={bookmarksOpen}
         articles={articles}
+        bookmarkIds={bookmarks}
         onClose={() => setBookmarksOpen(false)}
         onArticleClick={(article) => {
           setBookmarksOpen(false);
           setSelectedArticle(article);
         }}
         onSummarize={handleSummarize}
+        onBookmarkToggle={toggleBookmark}
       />
     </>
   );

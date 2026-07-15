@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useBookmarks } from '@/hooks/useBookmarks';
 import { NewsCard } from '@/components/news/NewsCard';
 import { Article } from '@/lib/types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,17 +9,17 @@ import { Bookmark, X } from 'lucide-react';
 interface BookmarksPageProps {
   isOpen: boolean;
   articles: Article[];
+  bookmarkIds: string[];
   onClose: () => void;
   onArticleClick: (article: Article) => void;
   onSummarize: (article: Article) => void;
+  onBookmarkToggle: (id: string) => void;
 }
 
-export function BookmarksPage({ isOpen, articles, onClose, onArticleClick, onSummarize }: BookmarksPageProps) {
-  const { bookmarks, toggleBookmark, isBookmarked } = useBookmarks();
-
+export function BookmarksPage({ isOpen, articles, bookmarkIds, onClose, onArticleClick, onSummarize, onBookmarkToggle }: BookmarksPageProps) {
   const savedArticles = useMemo(
-    () => articles.filter((a) => bookmarks.includes(a.id)),
-    [bookmarks, articles]
+    () => articles.filter((a) => bookmarkIds.includes(a.id)),
+    [bookmarkIds, articles]
   );
 
   return (
@@ -70,8 +69,8 @@ export function BookmarksPage({ isOpen, articles, onClose, onArticleClick, onSum
                       <NewsCard
                         key={article.id}
                         article={article}
-                        isBookmarked={isBookmarked(article.id)}
-                        onBookmarkToggle={toggleBookmark}
+                        isBookmarked={bookmarkIds.includes(article.id)}
+                        onBookmarkToggle={onBookmarkToggle}
                         onClick={onArticleClick}
                         onSummarize={onSummarize}
                       />
