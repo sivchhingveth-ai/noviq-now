@@ -60,19 +60,27 @@ function Dashboard() {
 
   const breakingNews = articles.filter((a) => a.isLive || a.isNew).slice(0, 10);
 
+  const validBookmarks = useMemo(() => {
+    return bookmarks.filter((id) => {
+      const article = articles.find((a) => a.id === id);
+      if (!article) return true;
+      return !article.isExpired;
+    });
+  }, [bookmarks, articles]);
+
   const displayArticles = useMemo(() => {
-    const bookmarked = articles.filter((a) => bookmarks.includes(a.id));
+    const bookmarked = articles.filter((a) => validBookmarks.includes(a.id));
     const filtered = category === 'all'
       ? articles
       : articles.filter((a) => a.category === category);
-    const merged = [...bookmarked, ...filtered.filter((a) => !bookmarks.includes(a.id))];
+    const merged = [...bookmarked, ...filtered.filter((a) => !validBookmarks.includes(a.id))];
     const seen = new Set<string>();
     return merged.filter((a) => {
       if (seen.has(a.id)) return false;
       seen.add(a.id);
       return true;
-    });
-  }, [category, articles, bookmarks]);
+    }).filter((a) => !a.isExpired);
+  }, [category, articles, validBookmarks]);
 
   const articleCount = displayArticles.length;
 
@@ -85,7 +93,7 @@ function Dashboard() {
         onSearch={search}
         notificationCount={unseenCount}
         onNotificationClick={markSeen}
-        bookmarkCount={bookmarks.length}
+        bookmarkCount={validBookmarks.length}
         onBookmarkClick={() => setBookmarksOpen(true)}
       />
 
@@ -153,7 +161,7 @@ function Dashboard() {
       <BookmarksPage
         isOpen={bookmarksOpen}
         articles={allArticles}
-        bookmarkIds={bookmarks}
+        bookmarkIds={validBookmarks}
         onClose={() => setBookmarksOpen(false)}
         onArticleClick={(article) => {
           setBookmarksOpen(false);

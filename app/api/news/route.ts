@@ -144,7 +144,7 @@ function buildArticle(item: { title: string; link: string; description: string; 
     url: item.link,
     isLive: ageMs < 30 * 60 * 1000,
     isNew: ageMs < 5 * 60 * 1000,
-    isExpired: ageMs > 30 * 24 * 60 * 60 * 1000,
+    isExpired: ageMs > 7 * 24 * 60 * 60 * 1000,
   };
 }
 
