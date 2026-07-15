@@ -12,7 +12,12 @@ export const metadata: Metadata = {
   title: 'InsightNewsFeed — Real-Time News Dashboard',
   description: 'Live news tracking dashboard with AI-powered summarization and real-time updates from multiple sources.',
   icons: {
-    icon: '/icons/favicon.png',
+    icon: [
+      { url: '/icons/favicon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icons/favicon.png', sizes: '16x16', type: 'image/png' },
+    ],
+    shortcut: '/icons/favicon.png',
+    apple: '/icons/favicon.png',
   },
 };
 
