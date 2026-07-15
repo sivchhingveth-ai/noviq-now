@@ -196,9 +196,9 @@ export const trendingTopics = [
 ];
 
 export const topSources = [
-  { name: 'CNBC', articles: 342 },
-  { name: 'MarketWatch', articles: 289 },
-  { name: 'Bloomberg', articles: 256 },
-  { name: 'NY Times Business', articles: 231 },
-  { name: 'Reuters Finance', articles: 198 },
+  { name: 'CNBC', articles: 342, logo: '/logos/cnbc.svg' },
+  { name: 'MarketWatch', articles: 289, logo: '/logos/marketwatch.svg' },
+  { name: 'Bloomberg', articles: 256, logo: '/logos/cnbc.svg' },
+  { name: 'NY Times Business', articles: 231, logo: '/logos/nyt.svg' },
+  { name: 'Reuters Finance', articles: 198, logo: '/logos/cnbc.svg' },
 ];

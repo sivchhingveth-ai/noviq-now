@@ -77,7 +77,14 @@ export function NewsCard({
 
       <div className="p-4">
         <div className="mb-2 flex items-center gap-2">
-          <span className="text-lg">{article.sourceLogo}</span>
+          <Image
+            src={article.sourceLogo}
+            alt={article.source}
+            width={20}
+            height={20}
+            className="rounded"
+            unoptimized
+          />
           <span className="text-xs font-medium text-text-secondary">
             {article.source}
           </span>

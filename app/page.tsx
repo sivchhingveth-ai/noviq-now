@@ -1,18 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { Navbar } from '@/components/layout/Navbar';
 import { HeroSection } from '@/components/hero/HeroSection';
 import { NewsFeed } from '@/components/news/NewsFeed';
 import { NewsSlideOver } from '@/components/news/NewsSlideOver';
 import { AIChatPanel } from '@/components/ui/AIChatPanel';
-import { SettingsModal } from '@/components/ui/SettingsModal';
 import { useNews } from '@/hooks/useNews';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import { useNotifications } from '@/hooks/useNotifications';
 import { useAI } from '@/hooks/useAI';
-import { Article } from '@/lib/types';
+import { Article, Category } from '@/lib/types';
 
 function Dashboard() {
   const {
@@ -30,14 +29,31 @@ function Dashboard() {
   const { messages, isLoading: isAiLoading, error: aiError, sendMessage, summarizeArticle, clearChat } = useAI();
 
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [settingsKey, setSettingsKey] = useState(0);
   const [aiChatOpen, setAiChatOpen] = useState(false);
 
   const handleSummarize = (article: Article) => {
+    setSelectedArticle(null); // close the slide-over so the chat is visible
     setAiChatOpen(true);
     summarizeArticle(article);
   };
+
+  // Jump back to the top whenever the category filter changes.
+  // Use an instant scroll — the list is replaced by a loading skeleton on
+  // change, and that reflow cancels a smooth-scroll animation mid-flight.
+  const handleCategoryChange = (cat: Category) => {
+    changeCategory(cat);
+    window.scrollTo(0, 0);
+  };
+
+  // Single source of truth for locking background scroll — avoids two
+  // overlays racing on document.body.style.overflow.
+  useEffect(() => {
+    const locked = selectedArticle !== null || aiChatOpen;
+    document.body.style.overflow = locked ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedArticle, aiChatOpen]);
 
   const breakingNews = articles.filter((a) => a.isLive || a.isNew).slice(0, 10);
 
@@ -45,7 +61,7 @@ function Dashboard() {
     <>
       <Navbar
         category={category}
-        onCategoryChange={changeCategory}
+        onCategoryChange={handleCategoryChange}
         searchQuery={searchQuery}
         onSearch={search}
         notificationCount={unseenCount}
@@ -99,7 +115,7 @@ function Dashboard() {
           }
         }}
         onClose={() => setSelectedArticle(null)}
-        onSummarize={summarizeArticle}
+        onSummarize={handleSummarize}
       />
 
       <AIChatPanel
@@ -111,9 +127,7 @@ function Dashboard() {
         onClose={() => setAiChatOpen(false)}
         onSend={sendMessage}
         onClear={clearChat}
-        onOpenSettings={() => { setSettingsKey((k) => k + 1); setSettingsOpen(true); }}
       />
-      <SettingsModal key={settingsKey} isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </>
   );
 }

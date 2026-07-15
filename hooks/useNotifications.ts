@@ -3,13 +3,13 @@
 import { useState, useCallback } from 'react';
 
 export function useNotifications(newCount: number) {
-  const [, setUnseenCount] = useState(0);
+  const [seenCount, setSeenCount] = useState(0);
 
   const markSeen = useCallback(() => {
-    setUnseenCount(0);
-  }, []);
+    setSeenCount(newCount);
+  }, [newCount]);
 
-  const currentCount = Math.max(0, newCount);
+  const unseenCount = Math.max(0, newCount - seenCount);
 
-  return { unseenCount: currentCount, markSeen };
+  return { unseenCount, markSeen };
 }

@@ -8,7 +8,7 @@ import { BookmarkButton } from '@/components/ui/BookmarkButton';
 import { SummarizeButton } from '@/components/ui/SummarizeButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink, Newspaper } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function decodeHtml(text: string) {
   const el = typeof document !== 'undefined' ? document.createElement('textarea') : null;
@@ -34,15 +34,6 @@ export function NewsSlideOver({
 }: NewsSlideOverProps) {
   const [imgError, setImgError] = useState(false);
 
-  useEffect(() => {
-    if (article) {
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [article]);
-
   const description = article ? decodeHtml(article.fullContent) : '';
   const sourceUrl = article?.url || '#';
 
@@ -67,7 +58,14 @@ export function NewsSlideOver({
           >
             <div className="sticky top-0 z-10 flex items-center justify-between border-b border-glass-border bg-surface/80 backdrop-blur-xl p-4">
               <div className="flex items-center gap-2">
-                <span className="text-lg">{article.sourceLogo}</span>
+                <Image
+                  src={article.sourceLogo}
+                  alt={article.source}
+                  width={24}
+                  height={24}
+                  className="rounded"
+                  unoptimized
+                />
                 <span className="text-sm font-medium text-text-secondary">{article.source}</span>
                 {article.isLive && (
                   <span className="flex items-center gap-1.5 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-accent">
@@ -92,11 +90,13 @@ export function NewsSlideOver({
 
             <div className="relative h-72 overflow-hidden">
               <Image
-                src={imgError ? `https://picsum.photos/seed/${article.id}/800/450` : article.imageUrl}
+                src={imgError ? `https://picsum.photos/seed/${article.id}/1280/720` : article.imageUrl}
                 alt={article.title}
                 fill
-                className="object-contain"
+                className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 512px"
+                priority
+                quality={90}
                 onError={() => setImgError(true)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60" />

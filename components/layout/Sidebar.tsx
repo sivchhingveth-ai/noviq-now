@@ -2,6 +2,7 @@
 
 import { trendingTopics, topSources } from '@/lib/mockData';
 import { TrendingUp, Newspaper } from 'lucide-react';
+import Image from 'next/image';
 
 export function Sidebar() {
   return (
@@ -33,8 +34,11 @@ export function Sidebar() {
         <ul className="space-y-3">
           {topSources.map((item) => (
             <li key={item.name} className="flex items-center justify-between">
-              <span className="text-sm text-text-primary">{item.name}</span>
-              <span className="text-xs text-text-secondary">{item.articles} articles</span>
+              <div className="flex items-center gap-2">
+                <Image src={item.logo} alt={item.name} width={18} height={18} className="rounded" unoptimized />
+                <span className="text-sm text-text-primary">{item.name}</span>
+              </div>
+              <span className="text-xs text-text-secondary">{item.articles}</span>
             </li>
           ))}
         </ul>

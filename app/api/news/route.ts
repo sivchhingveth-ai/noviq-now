@@ -2,29 +2,29 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const RSS_FEEDS: { url: string; category: string; source: string; logo: string; format: 'rss' | 'atom' }[] = [
   // Trading — financial & investment news
-  { url: 'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114', category: 'trading', source: 'CNBC', logo: '📈', format: 'rss' },
-  { url: 'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10001147', category: 'trading', source: 'CNBC Finance', logo: '💰', format: 'rss' },
-  { url: 'https://feeds.content.dowjones.io/public/rss/mw_topstories', category: 'trading', source: 'MarketWatch', logo: '📊', format: 'rss' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml', category: 'trading', source: 'NY Times', logo: '📰', format: 'rss' },
+  { url: 'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114', category: 'trading', source: 'CNBC', logo: '/logos/cnbc.svg', format: 'rss' },
+  { url: 'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10001147', category: 'trading', source: 'CNBC Finance', logo: '/logos/cnbc.svg', format: 'rss' },
+  { url: 'https://feeds.content.dowjones.io/public/rss/mw_topstories', category: 'trading', source: 'MarketWatch', logo: '/logos/marketwatch.svg', format: 'rss' },
+  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml', category: 'trading', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
 
   // Tech — general technology
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', category: 'tech', source: 'NY Times', logo: '📰', format: 'rss' },
-  { url: 'https://feeds.bbci.co.uk/news/technology/rss.xml', category: 'tech', source: 'BBC Tech', logo: '💻', format: 'rss' },
+  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', category: 'tech', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
+  { url: 'https://feeds.bbci.co.uk/news/technology/rss.xml', category: 'tech', source: 'BBC Tech', logo: '/logos/bbc.svg', format: 'rss' },
 
   // AI — artificial intelligence specific
-  { url: 'https://www.theverge.com/rss/ai-artificial-intelligence/index.xml', category: 'ai', source: 'The Verge', logo: '🤖', format: 'atom' },
-  { url: 'https://www.technologyreview.com/feed/', category: 'ai', source: 'MIT Tech Review', logo: '🧠', format: 'rss' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', category: 'ai', source: 'NY Times', logo: '📰', format: 'rss' },
+  { url: 'https://www.theverge.com/rss/ai-artificial-intelligence/index.xml', category: 'ai', source: 'The Verge', logo: '/logos/verge.svg', format: 'atom' },
+  { url: 'https://www.technologyreview.com/feed/', category: 'ai', source: 'MIT Tech Review', logo: '/logos/mit.svg', format: 'rss' },
+  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', category: 'ai', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
 
   // Technology — broader tech & science
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml', category: 'technology', source: 'NY Times', logo: '🔬', format: 'rss' },
-  { url: 'https://feeds.bbci.co.uk/news/technology/rss.xml', category: 'technology', source: 'BBC Tech', logo: '💻', format: 'rss' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', category: 'technology', source: 'NY Times', logo: '📰', format: 'rss' },
+  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml', category: 'technology', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
+  { url: 'https://feeds.bbci.co.uk/news/technology/rss.xml', category: 'technology', source: 'BBC Tech', logo: '/logos/bbc.svg', format: 'rss' },
+  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', category: 'technology', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
 
   // Wars — conflict & world news
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml', category: 'wars', source: 'NY Times', logo: '📰', format: 'rss' },
-  { url: 'https://feeds.bbci.co.uk/news/world/rss.xml', category: 'wars', source: 'BBC World', logo: '🌐', format: 'rss' },
-  { url: 'https://www.aljazeera.com/xml/rss/all.xml', category: 'wars', source: 'Al Jazeera', logo: '📡', format: 'rss' },
+  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml', category: 'wars', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
+  { url: 'https://feeds.bbci.co.uk/news/world/rss.xml', category: 'wars', source: 'BBC World', logo: '/logos/bbc.svg', format: 'rss' },
+  { url: 'https://www.aljazeera.com/xml/rss/all.xml', category: 'wars', source: 'Al Jazeera', logo: '/logos/aljazeera.svg', format: 'rss' },
 ];
 
 function decodeHtmlEntities(str: string) {
@@ -108,6 +108,24 @@ function matchesKeywords(title: string, keywords: string[]) {
   return keywords.some((kw) => lower.includes(kw));
 }
 
+function upgradeImageUrl(url: string): string {
+  if (!url) return url;
+  // BBC images: replace small size variants with larger ones
+  // e.g. /news/320/ → /news/1280/, /news/660/ → /news/1280/
+  if (url.includes('ichef.bbci.co.uk')) {
+    return url.replace(/\/news\/(320|480|660|800)\//, '/news/1280/');
+  }
+  // NYT images: replace thumbnail size with large
+  if (url.includes('static01.nyt.com') || url.includes('nyt.com')) {
+    return url.replace(/\/thumbLarge\//, '/superJumbo/').replace(/\/thumbStandard\//, '/superJumbo/');
+  }
+  // MarketWatch: try larger variant
+  if (url.includes('images.mktw.net')) {
+    return url.replace(/\/images\/\d+x\d+\//, '/images/1280x720/');
+  }
+  return url;
+}
+
 function buildArticle(item: { title: string; link: string; description: string; pubDate: string; imageUrl: string }, feed: typeof RSS_FEEDS[0], index: number) {
   const pubTime = item.pubDate ? new Date(item.pubDate).getTime() : Date.now();
   const slug = item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 30);
@@ -121,12 +139,12 @@ function buildArticle(item: { title: string; link: string; description: string; 
     source: feed.source,
     sourceLogo: feed.logo,
     category: feed.category as 'all' | 'trading' | 'tech' | 'ai' | 'technology' | 'wars',
-    imageUrl: item.imageUrl || `https://picsum.photos/seed/${slug}/800/450`,
+    imageUrl: upgradeImageUrl(item.imageUrl) || `https://picsum.photos/seed/${slug}/800/450`,
     publishedAt: item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString(),
     url: item.link,
     isLive: ageMs < 30 * 60 * 1000,
     isNew: ageMs < 5 * 60 * 1000,
-    isExpired: ageMs > 24 * 60 * 60 * 1000,
+    isExpired: ageMs > 30 * 24 * 60 * 60 * 1000,
   };
 }
 

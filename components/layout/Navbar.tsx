@@ -5,7 +5,7 @@ import { SearchBar } from '@/components/ui/SearchBar';
 import { CategoryTabs } from '@/components/ui/CategoryTabs';
 import { NotificationBell } from '@/components/ui/NotificationBell';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
-import { Zap } from 'lucide-react';
+import Image from 'next/image';
 
 interface NavbarProps {
   category: Category;
@@ -35,18 +35,20 @@ export function Navbar({
           }}
           className="flex items-center gap-2 shrink-0 hover:opacity-80 transition-opacity"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent">
-            <Zap className="h-4 w-4 text-white" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden">
+            <Image src="/icons/logo.png" alt="InsightNewsFeed" width={32} height={32} />
           </div>
           <span className="text-lg font-bold tracking-tight text-text-primary hidden sm:block">
             InsightNewsFeed
           </span>
         </button>
 
-        <div className="hidden lg:flex items-center flex-1">
+        {/* Search always lives in the top row to save vertical space */}
+        <div className="flex items-center flex-1 min-w-0">
           <SearchBar value={searchQuery} onChange={onSearch} />
         </div>
 
+        {/* Category tabs sit inline on large screens */}
         <nav className="hidden lg:flex items-center flex-1 justify-center">
           <CategoryTabs active={category} onChange={onCategoryChange} />
         </nav>
@@ -57,13 +59,9 @@ export function Navbar({
         </div>
       </div>
 
-      <div className="lg:hidden border-t border-glass-border px-4 pb-3">
-        <div className="flex items-center gap-3 pt-3">
-          <SearchBar value={searchQuery} onChange={onSearch} />
-        </div>
-        <div className="mt-2">
-          <CategoryTabs active={category} onChange={onCategoryChange} />
-        </div>
+      {/* On smaller screens only the tabs drop to a second row */}
+      <div className="lg:hidden border-t border-glass-border px-4 py-2 overflow-x-auto scrollbar-thin">
+        <CategoryTabs active={category} onChange={onCategoryChange} />
       </div>
     </header>
   );

@@ -1,57 +1,89 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = 'llama-3.3-70b-versatile';
+
+const SYSTEM_PROMPT =
+  'You are Insight AI, a news assistant for InsightNewsFeed. Write for a general reader in plain, easy-to-read English: short sentences, simple everyday words, and explain any jargon. Format for skimming — use short paragraphs and bullet points (each starting with "- ") for lists, and **bold** for key terms or labels. Be factual and neutral. When summarizing, cover all the important points, names, and figures without oversimplifying, but keep it clear and easy to follow. Use the article context when provided.';
+
+interface IncomingMessage {
+  role?: 'user' | 'assistant';
+  text: string;
+}
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages, apiKey } = await req.json();
+    const apiKey = process.env.GROQ_API_KEY;
 
     if (!apiKey) {
       return NextResponse.json(
-        { error: 'No API key provided. Click the gear icon to add your Gemini API key.' },
-        { status: 400 }
+        {
+          error:
+            'AI is not configured yet. Add GROQ_API_KEY to your .env.local file (get a free key at console.groq.com/keys) and restart the server.',
+        },
+        { status: 503 }
       );
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const { messages } = (await req.json()) as { messages: IncomingMessage[] };
 
-    const chat = model.startChat({
-      history: [
-        { role: 'user', parts: [{ text: 'You are Insight AI, a news assistant for InsightNewsFeed. Follow these rules: Be concise (under 200 words). Be factual. Use article context when provided. If the user asks about news, provide helpful summaries.' }] },
-        { role: 'model', parts: [{ text: 'Understood. I am Insight AI, ready to summarize news and answer questions accurately and concisely.' }] },
-      ],
-      generationConfig: {
-        maxOutputTokens: 500,
-        temperature: 0.3,
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return NextResponse.json({ error: 'No messages provided.' }, { status: 400 });
+    }
+
+    const chatMessages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...messages.map((m) => ({
+        role: m.role === 'assistant' ? 'assistant' : 'user',
+        content: m.text,
+      })),
+    ];
+
+    const res = await fetch(GROQ_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        messages: chatMessages,
+        temperature: 0.3,
+        max_tokens: 1024,
+      }),
     });
 
-    const lastMessage = messages[messages.length - 1];
-    const result = await chat.sendMessage(lastMessage.text);
-    const response = result.response.text();
+    if (!res.ok) {
+      const detail = await res.text();
+
+      if (res.status === 401) {
+        return NextResponse.json(
+          { error: 'Invalid GROQ_API_KEY. Get a free key at console.groq.com/keys and update .env.local.' },
+          { status: 401 }
+        );
+      }
+      if (res.status === 429) {
+        return NextResponse.json(
+          { error: 'Rate limit reached on the free tier. Please wait a moment and try again.' },
+          { status: 429 }
+        );
+      }
+
+      console.error('Groq API error:', res.status, detail);
+      return NextResponse.json({ error: `AI request failed (${res.status}).` }, { status: 502 });
+    }
+
+    const data = await res.json();
+    const response = data.choices?.[0]?.message?.content?.trim();
+
+    if (!response) {
+      return NextResponse.json({ error: 'The AI returned an empty response. Please try again.' }, { status: 502 });
+    }
 
     return NextResponse.json({ response });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-
-    if (message.includes('API_KEY_INVALID') || message.includes('key not valid')) {
-      return NextResponse.json(
-        { error: 'Invalid API key. Please get a free key at aistudio.google.com/apikey and save it in Settings.' },
-        { status: 401 }
-      );
-    }
-
-    if (message.includes('fetch') || message.includes('network')) {
-      return NextResponse.json(
-        { error: 'Network error. Please check your internet connection and try again.' },
-        { status: 502 }
-      );
-    }
-
-    console.error('Gemini API error:', message);
-    return NextResponse.json(
-      { error: `AI request failed: ${message}` },
-      { status: 500 }
-    );
+    console.error('Summarize route error:', message);
+    return NextResponse.json({ error: `AI request failed: ${message}` }, { status: 500 });
   }
 }

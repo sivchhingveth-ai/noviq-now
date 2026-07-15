@@ -1,8 +1,37 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useSyncExternalStore,
+  useEffect,
+  useCallback,
+  ReactNode,
+} from 'react';
 
 type Theme = 'dark' | 'light';
+
+const STORAGE_KEY = 'insight_theme';
+const listeners = new Set<() => void>();
+
+function subscribe(callback: () => void) {
+  listeners.add(callback);
+  window.addEventListener('storage', callback);
+  return () => {
+    listeners.delete(callback);
+    window.removeEventListener('storage', callback);
+  };
+}
+
+function getSnapshot(): Theme {
+  return localStorage.getItem(STORAGE_KEY) === 'light' ? 'light' : 'dark';
+}
+
+// Server (and the first client render during hydration) always assume the
+// default theme so the markup matches — the effect below syncs the real value.
+function getServerSnapshot(): Theme {
+  return 'dark';
+}
 
 interface ThemeContextType {
   theme: Theme;
@@ -14,25 +43,19 @@ const ThemeContext = createContext<ThemeContextType>({
   toggleTheme: () => {},
 });
 
-function getInitialTheme(): Theme {
-  if (typeof window === 'undefined') return 'dark';
-  const stored = localStorage.getItem('insight_theme') as Theme | null;
-  if (stored === 'light' || stored === 'dark') {
-    document.documentElement.classList.toggle('light', stored === 'light');
-    return stored;
-  }
-  return 'dark';
-}
-
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  const toggleTheme = () => {
-    const next = theme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
-    localStorage.setItem('insight_theme', next);
-    document.documentElement.classList.toggle('light', next === 'light');
-  };
+  // Keep the <html> class in sync with the current theme (toggle + cross-tab).
+  useEffect(() => {
+    document.documentElement.classList.toggle('light', theme === 'light');
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    const next: Theme = getSnapshot() === 'dark' ? 'light' : 'dark';
+    localStorage.setItem(STORAGE_KEY, next);
+    listeners.forEach((l) => l());
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
