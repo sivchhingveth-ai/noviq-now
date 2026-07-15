@@ -17,6 +17,18 @@ async function fetchLiveNews(category?: Category): Promise<Article[]> {
   }
 }
 
+function dedupeByUrl(prev: Article[], next: Article[]): Article[] {
+  const seen = new Set(prev.map((a) => a.url));
+  const merged = [...prev];
+  for (const a of next) {
+    if (!seen.has(a.url)) {
+      seen.add(a.url);
+      merged.push(a);
+    }
+  }
+  return merged;
+}
+
 export function useNews() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [category, setCategory] = useState<Category>('all');
@@ -29,15 +41,7 @@ export function useNews() {
       fetchedRef.current = true;
       fetchLiveNews('all').then((data) => {
         if (data.length > 0) {
-          setArticles((prev) => {
-            const merged = [...prev, ...data];
-            const seen = new Set<string>();
-            return merged.filter((a) => {
-              if (seen.has(a.id)) return false;
-              seen.add(a.id);
-              return true;
-            });
-          });
+          setArticles((prev) => dedupeByUrl(prev, data));
         }
         setIsLoading(false);
       });
@@ -51,15 +55,7 @@ export function useNews() {
     setIsLoading(true);
     fetchLiveNews(category).then((data) => {
       if (!cancelled && data.length > 0) {
-        setArticles((prev) => {
-          const merged = [...prev, ...data];
-          const seen = new Set<string>();
-          return merged.filter((a) => {
-            if (seen.has(a.id)) return false;
-            seen.add(a.id);
-            return true;
-          });
-        });
+        setArticles((prev) => dedupeByUrl(prev, data));
       }
       if (!cancelled) setIsLoading(false);
     });
@@ -73,15 +69,7 @@ export function useNews() {
     const interval = setInterval(() => {
       fetchLiveNews('all').then((data) => {
         if (data.length > 0) {
-          setArticles((prev) => {
-            const merged = [...prev, ...data];
-            const seen = new Set<string>();
-            return merged.filter((a) => {
-              if (seen.has(a.id)) return false;
-              seen.add(a.id);
-              return true;
-            });
-          });
+          setArticles((prev) => dedupeByUrl(prev, data));
         }
       });
     }, 30000);
