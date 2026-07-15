@@ -6,6 +6,7 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 
 const categories: { value: Category; label: string }[] = [
   { value: 'all', label: 'All' },
+  { value: 'saved', label: 'Saved' },
   { value: 'trading', label: 'Trading' },
   { value: 'tech', label: 'Tech' },
   { value: 'ai', label: 'AI' },

@@ -35,12 +35,16 @@ export function useNews() {
   }, []);
 
   useEffect(() => {
-    if (!fetchedRef.current) return;
+    if (!fetchedRef.current || category === 'saved') return;
+
+    let cancelled = false;
     setIsLoading(true);
     fetchLiveNews(category).then((data) => {
-      if (data.length > 0) setArticles(data);
-      setIsLoading(false);
+      if (!cancelled && data.length > 0) setArticles(data);
+      if (!cancelled) setIsLoading(false);
     });
+
+    return () => { cancelled = true; };
   }, [category]);
 
   useEffect(() => {

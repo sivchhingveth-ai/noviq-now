@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { Navbar } from '@/components/layout/Navbar';
 import { HeroSection } from '@/components/hero/HeroSection';
@@ -59,6 +59,15 @@ function Dashboard() {
 
   const breakingNews = articles.filter((a) => a.isLive || a.isNew).slice(0, 10);
 
+  const displayArticles = useMemo(() => {
+    if (category === 'saved') {
+      return articles.filter((a) => bookmarks.includes(a.id));
+    }
+    return articles;
+  }, [category, articles, bookmarks]);
+
+  const articleCount = category === 'saved' ? displayArticles.length : articles.length;
+
   return (
     <>
       <Navbar
@@ -77,10 +86,10 @@ function Dashboard() {
       <main className="w-full px-3 sm:px-4 py-6 sm:py-8 lg:px-8">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-bold text-text-primary">
-            {category === 'all' ? 'Latest News' : category === 'trading' ? 'Trading' : category === 'ai' ? 'AI' : category.charAt(0).toUpperCase() + category.slice(1)}
+            {category === 'all' ? 'Latest News' : category === 'saved' ? 'Saved Articles' : category === 'trading' ? 'Trading' : category === 'ai' ? 'AI' : category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
           <span className="text-sm text-text-secondary">
-            {articles.length} articles
+            {articleCount} articles
           </span>
         </div>
 
@@ -99,7 +108,7 @@ function Dashboard() {
               </div>
             ) : (
               <NewsFeed
-                articles={articles}
+                articles={displayArticles}
                 isBookmarked={isBookmarked}
                 onBookmarkToggle={toggleBookmark}
                 onArticleClick={setSelectedArticle}
