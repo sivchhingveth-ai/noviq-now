@@ -60,12 +60,11 @@ export function NewsFeed({
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       <AnimatePresence mode="sync">
-        {visibleArticles.map((article, index) => (
+        {visibleArticles.map((article) => (
           <NewsCard
             key={article.id}
             article={article}
             isBookmarked={bookmarkSet.has(article.id)}
-            staggerIndex={index % BATCH_SIZE}
             onBookmarkToggle={onBookmarkToggle}
             onClick={onArticleClick}
             onSummarize={onSummarize}
