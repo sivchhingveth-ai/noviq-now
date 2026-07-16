@@ -3,7 +3,9 @@
 import { Article } from '@/lib/types';
 import { NewsCard } from './NewsCard';
 import { AnimatePresence } from 'framer-motion';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
+
+const BATCH_SIZE = 10;
 
 interface NewsFeedProps {
   articles: Article[];
@@ -20,9 +22,28 @@ export function NewsFeed({
   onArticleClick,
   onSummarize,
 }: NewsFeedProps) {
+  const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const bookmarkSet = useMemo(() => {
     return new Set(articles.filter((a) => isBookmarked(a.id)).map((a) => a.id));
   }, [articles, isBookmarked]);
+
+  useEffect(() => {
+    setVisibleCount(BATCH_SIZE);
+  }, [articles]);
+
+  useEffect(() => {
+    if (visibleCount >= articles.length) return;
+
+    timerRef.current = setTimeout(() => {
+      setVisibleCount((prev) => Math.min(prev + BATCH_SIZE, articles.length));
+    }, 100);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [visibleCount, articles.length]);
 
   if (articles.length === 0) {
     return (
@@ -34,15 +55,17 @@ export function NewsFeed({
     );
   }
 
+  const visibleArticles = articles.slice(0, visibleCount);
+
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       <AnimatePresence mode="sync">
-        {articles.map((article, index) => (
+        {visibleArticles.map((article, index) => (
           <NewsCard
             key={article.id}
             article={article}
             isBookmarked={bookmarkSet.has(article.id)}
-            staggerIndex={index}
+            staggerIndex={index % BATCH_SIZE}
             onBookmarkToggle={onBookmarkToggle}
             onClick={onArticleClick}
             onSummarize={onSummarize}
