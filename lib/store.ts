@@ -2,9 +2,9 @@ import { Article } from './types';
 
 // Full article snapshots are persisted (not just ids) so saved articles
 // still render after the live feed rotates past them.
-const BOOKMARK_ARTICLES_KEY = 'insight_bookmark_articles';
-const READ_KEY = 'insight_read';
-const SEEN_KEY = 'insight_seen';
+const BOOKMARK_ARTICLES_KEY = 'noviq_bookmark_articles';
+const READ_KEY = 'noviq_read';
+const SEEN_KEY = 'noviq_seen';
 
 export function getBookmarkedArticles(): Article[] {
   if (typeof window === 'undefined') return [];

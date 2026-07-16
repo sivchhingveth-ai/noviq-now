@@ -16,7 +16,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'InsightNewsFeed — Real-Time News Dashboard',
+  title: 'Noviq Now — Real-Time News Dashboard',
   description: 'Live news tracking dashboard with AI-powered summarization and real-time updates from multiple sources.',
   icons: {
     icon: '/favicon.png',
@@ -35,7 +35,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col dot-grid">
         {/* Apply the saved theme before hydration to avoid a flash of the wrong theme. */}
         <Script id="theme-init" strategy="beforeInteractive">
-          {`try{if(localStorage.getItem('insight_theme')==='light'){document.documentElement.classList.add('light')}}catch(e){}`}
+          {`try{if(localStorage.getItem('noviq_theme')==='light'){document.documentElement.classList.add('light')}}catch(e){}`}
         </Script>
         {children}
       </body>

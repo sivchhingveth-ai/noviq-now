@@ -190,7 +190,7 @@ export async function GET(req: NextRequest) {
   const results = await Promise.allSettled(
     feeds.map(async (feed) => {
       const res = await fetch(feed.url, {
-        headers: { 'User-Agent': 'InsightNewsFeed/1.0' },
+        headers: { 'User-Agent': 'NoviqNow/1.0' },
         next: { revalidate: 30 },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

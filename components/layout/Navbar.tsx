@@ -46,10 +46,10 @@ export function Navbar({
           className="flex items-center gap-2 shrink-0 hover:opacity-80 transition-opacity"
         >
           <div className="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden">
-            <Image src="/icons/logo.png" alt="InsightNewsFeed" width={32} height={32} />
+            <Image src="/icons/logo.png" alt="Noviq Now" width={32} height={32} />
           </div>
           <span className="text-lg font-bold tracking-tight text-text-primary hidden sm:block">
-            InsightNewsFeed
+            Noviq Now
           </span>
         </button>
 

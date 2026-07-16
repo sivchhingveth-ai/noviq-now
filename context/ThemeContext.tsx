@@ -11,7 +11,7 @@ import {
 
 type Theme = 'dark' | 'light';
 
-const STORAGE_KEY = 'insight_theme';
+const STORAGE_KEY = 'noviq_theme';
 const listeners = new Set<() => void>();
 
 function subscribe(callback: () => void) {
