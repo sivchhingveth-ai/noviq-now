@@ -2,9 +2,9 @@
 
 import { ReactNode } from 'react';
 
-/** Render inline **bold** segments within a line of text. */
+/** Render inline **bold** segments and [text](url) links within a line of text. */
 function renderInline(text: string, keyPrefix: string): ReactNode[] {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  const parts = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g);
   return parts
     .filter((p) => p !== '')
     .map((part, i) => {
@@ -13,6 +13,20 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
           <strong key={`${keyPrefix}-b-${i}`} className="font-semibold text-text-primary">
             {part.slice(2, -2)}
           </strong>
+        );
+      }
+      const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (linkMatch) {
+        return (
+          <a
+            key={`${keyPrefix}-a-${i}`}
+            href={linkMatch[2]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent hover:underline"
+          >
+            {linkMatch[1]}
+          </a>
         );
       }
       return <span key={`${keyPrefix}-t-${i}`}>{part}</span>;

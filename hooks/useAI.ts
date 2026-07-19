@@ -21,7 +21,7 @@ export function useAI() {
         ? {
             role: 'user',
             text: displayText ?? text,
-            promptText: `[Article Context]\nTitle: ${article.title}\nSource: ${article.source}\nCategory: ${article.category}\nSummary: ${article.summary}\nFull Content: ${article.fullContent}\n\n[User Question]\n${text}`,
+            promptText: `[Article Context]\nTitle: ${article.title}\nSource: ${article.source}\nCategory: ${article.category}\nURL: ${article.url}\nSummary: ${article.summary}\nFull Content: ${article.fullContent}\n\n[User Question]\n${text}`,
           }
         : displayText
           ? { role: 'user', text: displayText, promptText: text }
