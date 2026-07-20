@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { ReactNode } from 'react';
 
 /** Render inline **bold** segments and [text](url) links within a line of text. */
@@ -63,8 +64,23 @@ export function FormattedMessage({ text }: { text: string }) {
     const trimmed = line.trim();
     const bulletMatch = trimmed.match(/^([*\-•])\s+(.*)$/);
     const headingMatch = trimmed.match(/^#{1,6}\s+(.*)$/);
+    const imageMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
 
-    if (bulletMatch) {
+    if (imageMatch) {
+      flushBullets(`ul-${idx}`);
+      blocks.push(
+        <a key={`img-${idx}`} href={imageMatch[2]} target="_blank" rel="noopener noreferrer">
+          <Image
+            src={imageMatch[2]}
+            alt={imageMatch[1]}
+            width={400}
+            height={200}
+            className="rounded-xl w-full h-auto object-cover max-h-48"
+            unoptimized
+          />
+        </a>
+      );
+    } else if (bulletMatch) {
       bullets.push(bulletMatch[2]);
     } else if (trimmed === '') {
       flushBullets(`ul-${idx}`);
