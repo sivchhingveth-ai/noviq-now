@@ -49,19 +49,20 @@ export const NewsCard = memo(function NewsCard({
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           loading="lazy"
+          unoptimized
           onError={() => setImgError(true)}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
         <div className="absolute left-3 top-3 flex items-center gap-2">
           {article.isLive && (
-            <span className="flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-semibold text-accent backdrop-blur-sm">
-              <PulsingDot className="h-1.5 w-1.5" />
+            <span className="flex items-center gap-1.5 rounded-full bg-[#0f172a]/80 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur-sm ring-1 ring-white/20">
+              <PulsingDot className="h-1.5 w-1.5" color="bg-white" />
               LIVE
             </span>
           )}
           {article.isNew && (
-            <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-semibold text-white">
+            <span className="rounded-full bg-[#0f172a]/80 px-2.5 py-1 text-[11px] font-semibold text-[#10b981] backdrop-blur-sm ring-1 ring-[#10b981]/20">
               NEW
             </span>
           )}
@@ -109,7 +110,7 @@ export const NewsCard = memo(function NewsCard({
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-glass-border bg-white/5 px-3 py-1.5 text-[12px] font-medium text-text-secondary transition-all hover:bg-white/10 hover:text-text-primary"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-glass-border bg-white/5 px-2.5 py-1 text-[11px] font-medium text-text-secondary transition-all hover:bg-white/10 hover:text-text-primary"
           >
             Read
             <ExternalLink className="h-3 w-3" />

@@ -7,25 +7,51 @@ const RSS_FEEDS: { url: string; category: string; source: string; logo: string; 
   { url: 'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10001147', category: 'trading', source: 'CNBC Finance', logo: '/logos/cnbc.svg', format: 'rss' },
   { url: 'https://feeds.content.dowjones.io/public/rss/mw_topstories', category: 'trading', source: 'MarketWatch', logo: '/logos/marketwatch.svg', format: 'rss' },
   { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml', category: 'trading', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
+  { url: 'https://www.reuters.com/arc/outboundfeeds/v3/all/rss.xml', category: 'trading', source: 'Reuters', logo: '/logos/reuters.svg', format: 'rss' },
 
-  // Tech — general technology
+  // Tech — technology, science, cars, robots & general must-know
   { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', category: 'tech', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
+  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml', category: 'tech', source: 'NY Times Science', logo: '/logos/nyt.svg', format: 'rss' },
   { url: 'https://feeds.bbci.co.uk/news/technology/rss.xml', category: 'tech', source: 'BBC Tech', logo: '/logos/bbc.svg', format: 'rss' },
+  { url: 'https://www.theverge.com/rss/index.xml', category: 'tech', source: 'The Verge', logo: '/logos/verge.svg', format: 'atom' },
+  { url: 'https://techcrunch.com/feed/', category: 'tech', source: 'TechCrunch', logo: '/logos/techcrunch.svg', format: 'rss' },
+  { url: 'https://www.wired.com/feed/rss', category: 'tech', source: 'Wired', logo: '/logos/wired.svg', format: 'rss' },
+  { url: 'https://www.engadget.com/rss.xml', category: 'tech', source: 'Engadget', logo: '/logos/engadget.svg', format: 'rss' },
+  { url: 'https://arstechnica.com/feed/', category: 'tech', source: 'Ars Technica', logo: '/logos/arstechnica.svg', format: 'rss' },
+  { url: 'https://spectrum.ieee.org/feeds/feed.rss', category: 'tech', source: 'IEEE Spectrum', logo: '/logos/ieee.svg', format: 'rss' },
+  { url: 'https://www.newscientist.com/feed/home/', category: 'tech', source: 'New Scientist', logo: '/logos/newscientist.svg', format: 'rss' },
+  { url: 'https://www.reuters.com/arc/outboundfeeds/v3/all/rss.xml', category: 'tech', source: 'Reuters', logo: '/logos/reuters.svg', format: 'rss' },
+  { url: 'https://www.technologyreview.com/feed/', category: 'tech', source: 'MIT Tech Review', logo: '/logos/mit.svg', format: 'rss' },
+  { url: 'https://www.autoblog.com/rss.xml', category: 'tech', source: 'Autoblog', logo: '/logos/engadget.svg', format: 'rss' },
+  { url: 'https://www.caranddriver.com/rss/all.xml/', category: 'tech', source: 'Car and Driver', logo: '/logos/engadget.svg', format: 'rss' },
+  { url: 'https://www.motortrend.com/feed/', category: 'tech', source: 'MotorTrend', logo: '/logos/engadget.svg', format: 'rss' },
+  { url: 'https://electrek.co/feed/', category: 'tech', source: 'Electrek', logo: '/logos/techcrunch.svg', format: 'rss' },
+  { url: 'https://www.theverge.com/rss/robotics/index.xml', category: 'tech', source: 'The Verge Robotics', logo: '/logos/verge.svg', format: 'atom' },
+  { url: 'https://techcrunch.com/category/transportation/feed/', category: 'tech', source: 'TechCrunch Transport', logo: '/logos/techcrunch.svg', format: 'rss' },
+  { url: 'https://www.npr.org/rss/rss.php?id=1006', category: 'tech', source: 'NPR Science', logo: '/logos/ieee.svg', format: 'rss' },
 
   // AI — artificial intelligence specific
   { url: 'https://www.theverge.com/rss/ai-artificial-intelligence/index.xml', category: 'ai', source: 'The Verge', logo: '/logos/verge.svg', format: 'atom' },
   { url: 'https://www.technologyreview.com/feed/', category: 'ai', source: 'MIT Tech Review', logo: '/logos/mit.svg', format: 'rss' },
   { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', category: 'ai', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
+  { url: 'https://techcrunch.com/category/artificial-intelligence/feed/', category: 'ai', source: 'TechCrunch AI', logo: '/logos/techcrunch.svg', format: 'rss' },
+  { url: 'https://venturebeat.com/category/ai/feed/', category: 'ai', source: 'VentureBeat', logo: '/logos/venturebeat.svg', format: 'rss' },
+  { url: 'https://arstechnica.com/feed/', category: 'ai', source: 'Ars Technica', logo: '/logos/arstechnica.svg', format: 'rss' },
+  { url: 'https://spectrum.ieee.org/feeds/feed.rss', category: 'ai', source: 'IEEE Spectrum', logo: '/logos/ieee.svg', format: 'rss' },
+  { url: 'https://www.newscientist.com/feed/home/', category: 'ai', source: 'New Scientist', logo: '/logos/newscientist.svg', format: 'rss' },
 
-  // Technology — broader tech & science
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml', category: 'technology', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
-  { url: 'https://feeds.bbci.co.uk/news/technology/rss.xml', category: 'technology', source: 'BBC Tech', logo: '/logos/bbc.svg', format: 'rss' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', category: 'technology', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
+  // China — Chinese tech, business & world news
+  { url: 'https://www.scmp.com/rss/91/feed', category: 'china', source: 'South China Morning Post', logo: '/logos/scmp.svg', format: 'rss' },
+  { url: 'https://www.scmp.com/rss/36/feed', category: 'china', source: 'SCMP Tech', logo: '/logos/scmp.svg', format: 'rss' },
+  { url: 'https://www.reuters.com/arc/outboundfeeds/v3/all/rss.xml', category: 'china', source: 'Reuters', logo: '/logos/reuters.svg', format: 'rss' },
+  { url: 'https://feeds.bbci.co.uk/news/world/asia/rss.xml', category: 'china', source: 'BBC Asia', logo: '/logos/bbc.svg', format: 'rss' },
+  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/AsiaPacific.xml', category: 'china', source: 'NY Times Asia', logo: '/logos/nyt.svg', format: 'rss' },
 
   // Wars — conflict & world news
   { url: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml', category: 'wars', source: 'NY Times', logo: '/logos/nyt.svg', format: 'rss' },
   { url: 'https://feeds.bbci.co.uk/news/world/rss.xml', category: 'wars', source: 'BBC World', logo: '/logos/bbc.svg', format: 'rss' },
   { url: 'https://www.aljazeera.com/xml/rss/all.xml', category: 'wars', source: 'Al Jazeera', logo: '/logos/aljazeera.svg', format: 'rss' },
+  { url: 'https://www.reuters.com/arc/outboundfeeds/v3/all/rss.xml', category: 'wars', source: 'Reuters', logo: '/logos/reuters.svg', format: 'rss' },
 ];
 
 function decodeCodePoint(match: string, code: number): string {
@@ -117,6 +143,7 @@ function parseXml(text: string, format: 'rss' | 'atom') {
 
 const WAR_KEYWORDS = ['war', 'strike', 'bomb', 'attack', 'conflict', 'military', 'troops', 'invasion', 'ceasefire', 'missile', 'weapon', 'nato', 'combat', 'soldier', 'ukraine', 'russia', 'gaza', 'israel', 'iran', 'syria', 'yemen', 'coup', 'civil war', 'nuclear'];
 const AI_KEYWORDS = ['ai', 'artificial intelligence', 'chatgpt', 'openai', 'anthropic', 'gemini', 'llm', 'gpt', 'machine learning', 'deep learning', 'neural', 'copilot', 'claude', 'deepseek', 'meta ai', 'ai model', 'ai safety', 'agi'];
+const CHINA_KEYWORDS = ['china', 'chinese', 'beijing', 'shanghai', 'huawei', 'xiaomi', 'byd', 'alibaba', 'tencent', 'baidu', 'tiktok', 'deepseek', 'smic', 'hong kong', 'taiwan', 'xi jinping', 'ccp', 'prc'];
 
 // Whole-word matching — a bare .includes() would match "ai" in "said"
 // or "war" in "software".
@@ -127,6 +154,7 @@ function buildKeywordRegex(keywords: string[]): RegExp {
 
 const WAR_REGEX = buildKeywordRegex(WAR_KEYWORDS);
 const AI_REGEX = buildKeywordRegex(AI_KEYWORDS);
+const CHINA_REGEX = buildKeywordRegex(CHINA_KEYWORDS);
 
 function upgradeImageUrl(url: string): string {
   if (!url) return url;
@@ -201,6 +229,7 @@ export async function GET(req: NextRequest) {
       // whether articles arrive via their own tab or via "all".
       if (feed.category === 'ai') feedArticles = feedArticles.filter((a) => AI_REGEX.test(a.title));
       if (feed.category === 'wars') feedArticles = feedArticles.filter((a) => WAR_REGEX.test(a.title));
+      if (feed.category === 'china') feedArticles = feedArticles.filter((a) => CHINA_REGEX.test(a.title) || CHINA_REGEX.test(a.summary));
       return feedArticles;
     })
   );

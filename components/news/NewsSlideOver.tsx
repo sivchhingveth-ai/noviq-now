@@ -68,8 +68,8 @@ export function NewsSlideOver({
                 />
                 <span className="text-sm font-medium text-text-secondary">{article.source}</span>
                 {article.isLive && (
-                  <span className="flex items-center gap-1.5 rounded-full bg-accent/10 px-2 py-0.5 text-[11px] font-semibold text-accent">
-                    <PulsingDot className="h-1.5 w-1.5" />
+                  <span className="flex items-center gap-1.5 rounded-full bg-[#0f172a]/80 px-2 py-0.5 text-[11px] font-semibold text-white ring-1 ring-white/20">
+                    <PulsingDot className="h-1.5 w-1.5" color="bg-white" />
                     LIVE
                   </span>
                 )}
@@ -97,6 +97,7 @@ export function NewsSlideOver({
                 sizes="(max-width: 1024px) 100vw, 512px"
                 priority
                 quality={90}
+                unoptimized
                 onError={() => setImgError(true)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60" />

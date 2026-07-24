@@ -3,7 +3,7 @@ export type Category =
   | 'trading'
   | 'tech'
   | 'ai'
-  | 'technology'
+  | 'china'
   | 'wars';
 
 export interface ChatMessage {

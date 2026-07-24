@@ -49,7 +49,7 @@ export function AIChatPanel({
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={onOpen}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-[#0a0a0a] shadow-[0_0_20px_rgba(139,92,246,0.5),0_0_40px_rgba(139,92,246,0.3)] text-white overflow-hidden"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-[#0a0a0a] shadow-[0_0_20px_rgba(255,255,255,0.5),0_0_40px_rgba(255,255,255,0.3)] text-white overflow-hidden"
         aria-label="Open AI assistant"
       >
         <Image src="/icons/chat-ai.jpg" alt="AI Chat" width={40} height={40} className="object-cover" unoptimized />
@@ -81,16 +81,17 @@ export function AIChatPanel({
                 <div className="flex items-center gap-1">
                   <button
                     onClick={onClear}
-                    className="flex h-7 w-7 items-center justify-center rounded-lg text-text-secondary hover:text-text-primary hover:bg-white/10 transition-colors"
-                    title="Clear chat"
+                    className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-white/10 transition-colors"
                   >
-                    <Eraser className="h-4 w-4" />
+                    <Eraser className="h-3.5 w-3.5" />
+                    Clear
                   </button>
                   <button
                     onClick={onClose}
-                    className="flex h-7 w-7 items-center justify-center rounded-lg text-text-secondary hover:text-text-primary hover:bg-white/10 transition-colors"
+                    className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-white/10 transition-colors"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-3.5 w-3.5" />
+                    Close
                   </button>
                 </div>
               </div>
